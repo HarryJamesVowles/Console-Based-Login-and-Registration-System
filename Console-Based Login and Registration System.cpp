@@ -52,24 +52,34 @@ void registerUser() {
 void loginUser() {
     string username, password;
 
-	// Ask for username and password
-    cout << "--- LOGIN ---" << endl;
-    cout << "Enter username: ";
-    cin >> username;
-    cout << "Enter password: ";
-    cin >> password;
+    //  While True: Check if username and password match database
+    while (true) {
+	    // Ask for username and password
+        cout << "--- LOGIN ---" << endl;
+        cout << "Enter username: ";
+        cin >> username;
+        cout << "Enter password: ";
+        cin >> password;
 
-	// Validate Credentials -> print success or error.
-    if (users.count(username)) {
-        if (users[username] == password) {
-            cout << "Login Successful!" << endl;
-        } else {
-            cout << "Wrong Password!" << endl;
+
+        // Validate Credentials -> print success or error.
+        if (users.count(username)) {
+            if (users[username] == password) {
+                cout << "Login Successful!" << endl;
+				break;
+            }
+            else {
+                cout << "Wrong Password!" << endl;
+				cout << "Please try again." << endl;
+				continue;
+            }
         }
-    } else {
-        cout << "User not found!" << endl;
-	}
-
+        else {
+            cout << "User not found!" << endl;
+			cout << "Please try again." << endl;
+		    continue;
+        }
+    }
 }
 
 
