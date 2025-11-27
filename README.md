@@ -33,8 +33,8 @@ The primary goal of this project is to move beyond isolated algorithmic problems
     ```bash
     git clone [https://github.com/HarryJamesVowles/Cpp-Login-System.git](https://github.com/HarryJamesVowles/Cpp-Login-System.git)
     ```
-2.  Open the `LoginSystem.sln` file in Visual Studio.
-3.  Ensure `LoginSystem` is set as the **Startup Project** (Right-click project -> Set as Startup Project).
+2.  Open the `Console-Based Login and Registration System.sln` file in Visual Studio.
+3.  Ensure **"Console-Based Login and Registration System"** is set as the **Startup Project** (Right-click project name -> Set as Startup Project).
 4.  Press **F5** (or click the Green Play Button) to build and run.
 
 ## 🤝 Attribution
