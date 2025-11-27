@@ -83,10 +83,8 @@ void loginUser() {
 }
 
 
-// ---------------------------------------------------------
+
 // MAIN FUNCTION
-// This runs the loop. You don't need to change this much.
-// ---------------------------------------------------------
 int main() {
     int choice = 0;
 
@@ -98,6 +96,14 @@ int main() {
         cout << "3. Exit" << endl;
         cout << "Enter choice: ";
         cin >> choice;
+
+		// Input validation -> if cin fails, clear and ignore invalid input. (suggested by Google Gemini)
+		if (cin.fail()) {
+            cin.clear(); // clear the error flag
+            cin.ignore(numeric_limits<streamsize>::max(), '\n'); // discard invalid input
+            cout << "Invalid input, please enter a number." << endl;
+            continue;
+        }
 
         if (choice == 1) {
             registerUser();
