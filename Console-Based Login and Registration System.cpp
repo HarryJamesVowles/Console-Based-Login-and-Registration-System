@@ -13,10 +13,8 @@ using namespace std;
 unordered_map<string, string> users;
 
 
-// ---------------------------------------------------------
+
 // FUNCTION: Register User
-// Goal: Add a new user if they don't exist yet.
-// ---------------------------------------------------------
 void registerUser() {
     string username, password;
     
@@ -50,34 +48,28 @@ void registerUser() {
 }
 
 
-// ---------------------------------------------------------
 // FUNCTION: Login User
-// Goal: Authenticate a user.
-// ---------------------------------------------------------
 void loginUser() {
     string username, password;
 
+	// Ask for username and password
     cout << "--- LOGIN ---" << endl;
     cout << "Enter username: ";
     cin >> username;
     cout << "Enter password: ";
     cin >> password;
 
-    // TODO STEP 3: Validate Credentials
-    // Logic:
-    // 1. Check if user exists (using .count() or .find())
-    // 2. IF they exist, Check if users[username] matches the input password.
+	// Validate Credentials -> print success or error.
+    if (users.count(username)) {
+        if (users[username] == password) {
+            cout << "Login Successful!" << endl;
+        } else {
+            cout << "Wrong Password!" << endl;
+        }
+    } else {
+        cout << "User not found!" << endl;
+	}
 
-    // Hint:
-    // if (users.count(username)) {
-    //      if (users[username] == password) {
-    //          print "Login Successful!"
-    //      } else {
-    //          print "Wrong Password!"
-    //      }
-    // } else {
-    //      print "User not found!"
-    // }
 }
 
 
