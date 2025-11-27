@@ -19,22 +19,34 @@ unordered_map<string, string> users;
 // ---------------------------------------------------------
 void registerUser() {
     string username, password;
+    
 
-    cout << "--- REGISTRATION ---" << endl;
-    cout << "Enter new username: ";
-    cin >> username;
+	// While True: username in users -> try again.
+    while (true) {
+        cout << "--- REGISTRATION ---" << endl;
+        cout << "Enter new username: ";    cin >> username;
 
-    // TODO STEP 1: Check if username already exists
-    // Hint: Use if (users.count(username)) ...
-
-        // If true: Print "Error: User already exists!"
-
-
-    // TODO STEP 2: If user does NOT exist
-    // 1. Ask for password ( cout << "Enter password: "; cin >> password; )
-    // 2. Insert into map ( users[username] = password; )
-    // 3. Print "User registered successfully!"
-
+        // If user exists -> print error
+        if (users.count(username)) {
+            cout << "Error: User already exists!" << endl;
+            cout << "Please try again." << endl;
+            continue;
+        }
+        break;
+    }
+    // While True: Ask for password, Ask for password again -> if match, break.
+    while (true) {
+        cout << "Enter password: ";    cin >> password;
+        cout << "Re-enter password: ";    string password2;    cin >> password2;
+        if (password != password2) {
+            cout << "Error: Passwords do not match! Please try again." << endl;
+            continue;
+        }
+		// If passwords match -> insert into map, print success.
+		users[username] = password;
+		cout << "User registered successfully!" << endl;
+        break;
+    }
 }
 
 
