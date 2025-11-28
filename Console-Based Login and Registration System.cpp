@@ -2,17 +2,43 @@
 #include <string>
 #include <unordered_map>
 #include <vector>
-
+#include <fstream>    // For file saving/loading
+#include <functional> // For password hashing
+#include <limits> // To discard invalid input from cin
 using namespace std;
 
-// ---------------------------------------------------------
 // GLOBAL DATABASE
-// We use a global map so both functions can access it easily.
-// Key = Username (string), Value = Password (string)
-// ---------------------------------------------------------
 unordered_map<string, string> users;
+const string DB_FILE = "users.txt"; // The file name
 
+// FUNCTION: Hash Password (simple example, not secure for real applications)
+string hashPassword(const string& password) {
+	hash<string> hasher; // Standard hash -> called hasher
+	size_t hashed = hasher(password);
+	return to_string(hashed); // Convert to string
+}
 
+// FUNCTION: Save Database to file
+void saveDatabase() {
+	ofstream outfile(DB_FILE); // Open file for writing
+	for (const auto& pair : users) { // Iterate through map
+        outfile << pair.first << " " << pair.second << endl;
+    }
+    outfile.close();
+}
+// FUNCTION: Load Database from file
+void loadDatabase() {
+	ifstream infile(DB_FILE); // Open file for reading
+	if (!infile.is_open()) { // If file doesn't exist
+        cout << "No existing database found. Starting fresh." << endl;
+        return;
+    }
+    string username, hashedPassword;
+    while (infile >> username >> hashedPassword) {
+		users[username] = hashedPassword; // Load into map
+    }
+    infile.close();
+}
 
 // FUNCTION: Register User
 void registerUser() {
@@ -41,8 +67,9 @@ void registerUser() {
             continue;
         }
 		// If passwords match -> insert into map, print success.
-		users[username] = password;
+        users[username] = hashPassword(password);
 		cout << "User registered successfully!" << endl;
+		saveDatabase(); // Save database after registration
         break;
     }
 }
@@ -63,21 +90,23 @@ void loginUser() {
 
 
         // Validate Credentials -> print success or error.
-        if (users.count(username)) {
-            if (users[username] == password) {
+        auto it = users.find(username);
+        if (it != users.end()) {
+            // Compare stored hashed password with hash of entered password
+            if (it->second == hashPassword(password)) {
                 cout << "Login Successful!" << endl;
-				break;
+                break;
             }
             else {
                 cout << "Wrong Password!" << endl;
-				cout << "Please try again." << endl;
-				continue;
+                cout << "Please try again." << endl;
+                continue;
             }
         }
         else {
             cout << "User not found!" << endl;
-			cout << "Please try again." << endl;
-		    continue;
+            cout << "Please try again." << endl;
+            continue;
         }
     }
 }
@@ -86,6 +115,7 @@ void loginUser() {
 
 // MAIN FUNCTION
 int main() {
+	loadDatabase(); // Load database at start
     int choice = 0;
 
     // While loop keeps program running until user types 3
