@@ -8,11 +8,13 @@
 using namespace std;
 
 // GLOBAL DATABASE
+// TODO: REFACTOR - Move users database to a class for better encapsulation. Not global.
 unordered_map<string, string> users;
 const string DB_FILE = "users.txt"; // The file name
 
 // FUNCTION: Hash Password (simple example, not secure for real applications)
 string hashPassword(const string& password) {
+	// TODO: IMPROVE - Use a proper cryptographic hash function with salt for real applications or sha256 from <openssl/sha.h>
     hash<string> hasher; // Standard hash -> called hasher
     size_t hashed = hasher(password);
     return to_string(hashed); // Convert to string
@@ -22,6 +24,7 @@ string hashPassword(const string& password) {
 void saveDatabase() {
     ofstream outfile(DB_FILE); // Open file for writing
     for (const auto& pair : users) { // Iterate through map
+		// TODO: DATA: change database to use .append mode and only write new users instead of rewriting entire file.
         outfile << pair.first << " " << pair.second << endl;
     }
     outfile.close();
@@ -44,9 +47,11 @@ void loadDatabase() {
 void registerUser() {
     string username, password;
 
+	//TODO : UX - Allow user to exit registration by typing 'exit' as username.
     // While True: username in users -> try again.
     while (true) {
         cout << "--- REGISTRATION ---" << endl;
+		// TODO: Critical - Cin input validation to prevent spaces in username/password.
         cout << "Enter new username (NO Spaces): ";
         cin >> username;
 
@@ -60,6 +65,7 @@ void registerUser() {
     }
     // While True: Ask for password, Ask for password again -> if match, break.
     while (true) {
+		// TODO: Critical - Cin input validation to prevent spaces in username/password.
         cout << "Enter password (NO Spaces): ";
         cin >> password;
         cout << "Re-enter password (NO Spaces): ";
