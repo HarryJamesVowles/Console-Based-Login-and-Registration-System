@@ -10,6 +10,7 @@ using namespace std;
 // GLOBAL DATABASE
 // TODO: REFACTOR - Move users database to a class for better encapsulation. Not global.
 unordered_map<string, string> users;
+unordered_map<string, string> loadedUsers; // Track users that were loaded from file
 const string DB_FILE = "users.txt"; // The file name
 
 // FUNCTION: Hash Password (simple example, not secure for real applications)
@@ -21,13 +22,27 @@ string hashPassword(const string& password) {
 }
 
 // FUNCTION: Save Database to file
-void saveDatabase() {
-    ofstream outfile(DB_FILE); // Open file for writing
-    for (const auto& pair : users) { // Iterate through map
-		// TODO: DATA: change database to use .append mode and only write new users instead of rewriting entire file.
-        outfile << pair.first << " " << pair.second << endl;
+void saveDatabase(bool forceFullRewrite = false) {
+    if (forceFullRewrite) {
+        // Full rewrite: truncate and write all users
+        ofstream outfile(DB_FILE); // Open file for writing (overwrites)
+        for (const auto& pair : users) {
+            outfile << pair.first << " " << pair.second << endl;
+        }
+        outfile.close();
+        loadedUsers = users; // Update tracked users after full rewrite
+    } else {
+        // Append mode: only write new users
+        ofstream outfile(DB_FILE, ios::app); // Open file in append mode
+        for (const auto& pair : users) {
+            // Only write if this user wasn't in the original loaded set
+            if (loadedUsers.find(pair.first) == loadedUsers.end()) {
+                outfile << pair.first << " " << pair.second << endl;
+                loadedUsers[pair.first] = pair.second; // Track as now loaded
+            }
+        }
+        outfile.close();
     }
-    outfile.close();
 }
 // FUNCTION: Load Database from file
 void loadDatabase() {
@@ -39,6 +54,7 @@ void loadDatabase() {
     string username, hashedPassword;
     while (infile >> username >> hashedPassword) {
         users[username] = hashedPassword; // Load into map
+        loadedUsers[username] = hashedPassword; // Track loaded users
     }
     infile.close();
 }
